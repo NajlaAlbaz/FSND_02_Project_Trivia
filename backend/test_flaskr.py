@@ -2,7 +2,7 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-
+from decouple import config
 from flaskr import create_app
 from models import setup_db, Question, Category
 
@@ -15,7 +15,7 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "trivia_test"
-        self.database_path = "postgres://{}:{}@{}/{}".format('NajlaKB', '1234','localhost:5432', self.database_name)
+        self.database_path = "postgres://{}:{}@{}/{}".format(config('USERNAME'), config('PASSWORD'),'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
         self.new_question = {

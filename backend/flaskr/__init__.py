@@ -50,7 +50,9 @@ def create_app(test_config=None):
     @app.route('/categories')
     def get_categories():
         categories = Category.query.order_by(Category.type).all()
-        formatted_categories = {category.id: category.type for category in categories}
+        formatted_categories = {
+            category.id: category.type for category in categories
+            }
 
         return jsonify({
             'success': True,
@@ -83,7 +85,10 @@ def create_app(test_config=None):
                 'questions': formatted_questions,
                 'total_questions': len(questions),
                 'current_category': None,
-                'categories': {category.id: category.type for category in Category.query.order_by(Category.type).all()}
+                'categories': {
+                    category.id: category.type for category in
+                    Category.query.order_by(Category.type).all()
+                        }
             })
 
     '''
@@ -105,7 +110,7 @@ def create_app(test_config=None):
                 'success': True,
                 'deleted': question_id
             })
-        except:
+        except Exception:
             abort(422)
 
     '''
@@ -141,7 +146,7 @@ def create_app(test_config=None):
                 'created': new_question.id
             })
 
-        except:
+        except Exception:
             abort(422)
 
     '''
@@ -172,7 +177,7 @@ def create_app(test_config=None):
                 'questions': formatted_questions,
                 'current_category': None
             })
-        except:
+        except Exception:
             abort(422)
 
     '''
@@ -198,7 +203,7 @@ def create_app(test_config=None):
                 'total_questions': len(formatted_questions),
                 'current_category': category_id
             })
-        except:
+        except Exception:
             abort(404)
 
     '''
@@ -243,7 +248,7 @@ def create_app(test_config=None):
                 'success': True,
                 'question': current_question
             })
-        except:
+        except Exception:
             abort(422)
 
     '''
