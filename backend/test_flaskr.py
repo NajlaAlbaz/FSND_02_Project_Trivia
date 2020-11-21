@@ -102,23 +102,25 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['questions']))
-        self.assertTrue(data['total_questions'])
-        self.assertEqual(data['current_category'], None)
-        self.assertTrue(data['categories'])
         pass
 
     def test_delete_question(self):
-        res = self.client().delete('/questions/1')
+        new_question = Question(
+            question='A question',
+            answer='an answer',
+            difficulty=3,
+            category=1
+            )
+        new_question.insert()
+
+        res = self.client().delete(f'/questions/{new_question.id}')
         data = json.loads(res.data)
 
-        question = Question.query.filter(Question.id==1).one_or_none()
+        question = Question.query.filter(Question.id==new_question.id).one_or_none()
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['questions']))
-        self.assertTrue(data['total_questions'])
-        self.assertEqual(data['current_category'], None)
+        self.assertEqual(data['deleted'], new_question.id)
         self.assertEqual(question, None)
         pass
 
@@ -155,7 +157,7 @@ class TriviaTestCase(unittest.TestCase):
         pass
 
     def test_get_quizzes(self):
-        res = self.client().post('/quizzes', json={'quiz_category': 1, 'previous_questions': None})
+        res = self.client().post('/quizzes', json={'quiz_category': {'id': 0}, 'previous_questions': []})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
